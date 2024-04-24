@@ -1,14 +1,12 @@
-package PCAD_Lab3;
 public class RWbasic {
     private int data = 0;
     int tmp = 0;
 
-    int read() {
+    protected int read() {
         return data;
     }
 
-    private int write() {
-
+    protected int write() {
         tmp = data;
         try {
             Thread.sleep(100);
@@ -52,14 +50,12 @@ public class RWbasic {
         }
     }
 
-  
-
     public static void main(String[] args) {
-        RWbasic rw = new RWbasic();
-        Thread[] threads = new Thread[100]; // Modifica qui: dimensione dell'array di thread a 10
-        for (int i = 0; i < 50; i++) { // Modifica qui: ciclo da 0 a 4 invece che da 0 a 49
+        RW rw = new RW();
+        Thread[] threads = new Thread[100]; 
+        for (int i = 0; i < 50; i++) { 
             threads[i] = new Thread(new Reader(rw, i), "Reader " + i);
-            threads[i + 50] = new Thread(new Writer(rw, i), "Writer " + i); // Modifica qui: indice del thread scrittore
+            threads[i + 50] = new Thread(new Writer(rw, i), "Writer " + i);
         }
         for (Thread thread : threads) {
             thread.start();
