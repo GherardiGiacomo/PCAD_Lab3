@@ -1,3 +1,4 @@
+package PCAD_Lab3;
 public class RWbasic {
     private int data = 0;
     int tmp = 0;
