@@ -1,75 +1,85 @@
-public class RWbasic {
+class RWbasic {
     private int data = 0;
-    int tmp = 0;
 
-    protected int read() {
+    public int read() {
         return data;
     }
 
-    protected int write() {
-
-        tmp = data;
+    public void write() {
+        int tmp = data; // (a) Legge il valore di data
+        tmp++; // (b) Aumenta di 1 il valore
+        // Simula un ritardo durante la scrittura
         try {
             Thread.sleep(100);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        tmp = tmp + 1;
-        data = tmp;
-        return data;
+        data = tmp; // (c) Assegna il nuovo valore a data
     }
 
     public static class Reader implements Runnable {
-        private RWexclusive rw;
-        private int id;
+        private RWbasic rw;
 
-        public Reader(RWexclusive rw, int id) {
+        public Reader(RWbasic rw) {
             this.rw = rw;
-            this.id = id;
         }
 
         @Override
         public void run() {
-            int i = rw.read();
-            System.out.println("Thread lettore " + id + " ha letto il valore " + i);
+            int value = rw.read();
+            System.out.println(Thread.currentThread().getName() + " - Valore letto: " + value);
         }
     }
 
     public static class Writer implements Runnable {
-        private RWexclusive rw;
-        private int id;
+        private RWbasic rw;
 
-        public Writer(RWexclusive rw, int id) {
+        public Writer(RWbasic rw) {
             this.rw = rw;
-            this.id = id;
         }
 
         @Override
         public void run() {
-            int writtenValue = rw.write();
-            System.out.println("Il thread scrittore " + id + " incrementa di 1 il valore di data che in questo momento vale:" + writtenValue);
+            rw.write();
+            System.out.println(Thread.currentThread().getName() + " - Scrittura completata");
         }
     }
 
-  
-
     public static void main(String[] args) {
-        RWexclusive rw = new RWexclusive();
-        Thread[] threads = new Thread[100]; 
-        for (int i = 0; i < 50; i++) { 
-            threads[i] = new Thread(new Reader(rw, i), "Reader " + i);
-            threads[i + 50] = new Thread(new Writer(rw, i), "Writer " + i);
+        RWbasic rw = new RWbasic();
+        int numReaders = 50;
+        int numWriters = 50;
+
+        Thread[] readerThreads = new Thread[numReaders];
+        for (int i = 0; i < numReaders; i++) {
+            readerThreads[i] = new Thread(new Reader(rw), "Lettore-" + i);
+            readerThreads[i].start();
         }
-        for (Thread thread : threads) {
-            thread.start();
+
+        Thread[] writerThreads = new Thread[numWriters];
+        for (int i = 0; i < numWriters; i++) {
+            writerThreads[i] = new Thread(new Writer(rw), "Scrittore-" + i);
+            writerThreads[i].start();
         }
-        for (Thread thread : threads) {
+
+        // Attende che tutti i thread del lettore finiscano
+        for (Thread readerThread : readerThreads) {
             try {
-                thread.join();
+                readerThread.join();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
-        System.out.println("Il valore finale di data é: " + rw.read());
+
+        // Attende che tutti i thread dello scrittore finiscano
+        for (Thread writerThread : writerThreads) {
+            try {
+                writerThread.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        System.out.println("Valore finale del data: " + rw.read());
     }
 }
