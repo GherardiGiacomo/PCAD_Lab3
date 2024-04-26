@@ -71,7 +71,7 @@ class RWbasic {
             }
         }
 
-        // Attendere che tutti i thread dello scrittore finiscano
+        // Attende che tutti i thread dello scrittore finiscano
         for (Thread writerThread : writerThreads) {
             try {
                 writerThread.join();
