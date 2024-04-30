@@ -7,11 +7,11 @@ Negli esercizi seguenti proponiamo di programmare il problema dei lettori/scritt
 In una prima versione, ci interessiamo solo alla concorrenza senza sincronizzazione ne mutua esclusione.
 
 1. Scrivere una classe RWbasic contenendo un campo intero privato data inizializzato a 0 al quale l’accesso è fatto senza mutua esclusione da due funzione:
-       - read chi ritorna il valore didata, e,
-       - write chi aumenta di 1 il valore didatain vari fasi:
-   (a) mette il valore didatain una variabile temporaneatmp;
-   (b) aumenta di 1 il valore ditmp;
-   (c) mette il valore ditmpindata.
+       - read chi ritorna il valore di data, e,
+       - write chi aumenta di 1 il valore di data in vari fasi:
+   (a) mette il valore di datain una variabile temporaneatmp;
+   (b) aumenta di 1 il valore di tmp;
+   (c) mette il valore di tmp indata.
 
 2. Scrivere una classeReader che implementa l’interfaccia Runnable. Il costruttore di questa classe riceve come argomento un oggetto della classe RWbasic. Nel suo codice eseguibile (funzione run), chiama la funzione read associata e stampa il valore della data.
 3. Scrivere una classe Writer che implementa l’interfaccia Runnable. Il costruttore di questa classe riceve come argomento un oggetto della classe RWbasic. Nel suo codice eseguibile (funzionerun), chiama la funzione write associata.
@@ -22,14 +22,14 @@ In una prima versione, ci interessiamo solo alla concorrenza senza sincronizzazi
 In una seconda versione, ci interessiamo alla mutua esclusione.
 
 1. Scrivere una classe RWexclusive che estende RWbasic rendendo esclusivo l’accesso alla data.
-2. Modificare il codice gia scritto delle classe Reader,Writer e del programma principale perché usano la classe RWexclusive al posto di RWbasic.
+2. Modificare il codice gia scritto delle classe Reader, Writer e del programma principale perché usano la classe RWexclusive al posto di RWbasic.
 3. Osservare il comportamento del programma come nel esercizio precedente. Il problema sollevato dovrebbe essere risolto.
 
 # Esercizio 3
 
 La terza versione che vi chiediamo è una versione dove più lettori possono accedere alla data allo stesso tempo ma invece gli scrittori devono essere in mutua esclusione e se dei lettori stanno leggendo la data, gli scrittori non possono accederci.
 
-1. Scrivere una classeRWche estendeRWbasice verifica le proprietà date qui sopra. Per fare questo, potete usare un contattore che conta i lettori e dividere la funzione read in varie sotto funzione. In più è consigliata di usare waitenotify per svegliare gli scrittori che aspettano la fine della lettura dei lettori.
+1. Scrivere una classeRW che estende RWbasice verifica le proprietà date qui sopra. Per fare questo, potete usare un contattore che conta i lettori e dividere la funzione read in varie sotto funzione. In più è consigliata di usare waitenotify per svegliare gli scrittori che aspettano la fine della lettura dei lettori.
 
 2. Osservare il comportamento del programma modificato.
 
