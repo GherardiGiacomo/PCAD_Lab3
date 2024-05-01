@@ -9,7 +9,7 @@ In una prima versione, ci interessiamo solo alla concorrenza senza sincronizzazi
 1. Scrivere una classe RWbasic contenendo un campo intero privato data inizializzato a 0 al quale l’accesso è fatto senza mutua esclusione da due funzione:
        - read chi ritorna il valore di data, e,
        - write chi aumenta di 1 il valore di data in vari fasi:
-   (a) mette il valore di datain una variabile temporaneatmp;
+   (a) mette il valore di data  in una variabile temporanea tmp;
    (b) aumenta di 1 il valore di tmp;
    (c) mette il valore di tmp indata.
 
@@ -29,7 +29,7 @@ In una seconda versione, ci interessiamo alla mutua esclusione.
 
 La terza versione che vi chiediamo è una versione dove più lettori possono accedere alla data allo stesso tempo ma invece gli scrittori devono essere in mutua esclusione e se dei lettori stanno leggendo la data, gli scrittori non possono accederci.
 
-1. Scrivere una classeRW che estende RWbasice verifica le proprietà date qui sopra. Per fare questo, potete usare un contattore che conta i lettori e dividere la funzione read in varie sotto funzione. In più è consigliata di usare waitenotify per svegliare gli scrittori che aspettano la fine della lettura dei lettori.
+1. Scrivere una classeRW che estende RWbasice verifica le proprietà date qui sopra. Per fare questo, potete usare un contattore che conta i lettori e dividere la funzione read in varie sotto funzione. In più è consigliata di usare wait e notify per svegliare gli scrittori che aspettano la fine della lettura dei lettori.
 
 2. Osservare il comportamento del programma modificato.
 
