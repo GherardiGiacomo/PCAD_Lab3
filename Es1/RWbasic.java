@@ -1,4 +1,4 @@
-public class RWbasic {
+public class RWbasic { 
     private int data;
 
     public RWbasic() {

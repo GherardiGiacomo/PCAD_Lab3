@@ -22,7 +22,7 @@ public class RWext extends RWbasic {
             notifyAll();
         }
         if (semaphore.availablePermits() > 0) {
-            try {
+             try {
                 semaphore.acquire();
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();

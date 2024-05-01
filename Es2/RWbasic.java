@@ -1,5 +1,5 @@
 public class RWbasic {
-    protected int data;
+    protected int data; 
 
     public RWbasic() {
         this.data = 0;

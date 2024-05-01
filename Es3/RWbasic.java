@@ -89,3 +89,4 @@ public class RWbasic {
         System.out.println("Il valore finale di data é: " + rw.read());
     }
 } 
+ 
