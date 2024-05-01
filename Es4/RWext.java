@@ -1,6 +1,9 @@
-public class RW extends RWbasic {
+import java.util.concurrent.Semaphore;
+
+public class RWext extends RWbasic {
     private int readerCount = 0;
     private boolean isWriting = false;
+    private Semaphore semaphore = new Semaphore(0);
 
     @Override
     public synchronized int read() {
@@ -18,6 +21,14 @@ public class RW extends RWbasic {
         if (readerCount == 0) {
             notifyAll();
         }
+        if (semaphore.availablePermits() > 0) {
+            try {
+                semaphore.acquire();
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                System.err.println("Interruzione del thread " + Thread.currentThread().getName());
+            }
+        }
         return tmp;
     }
 
@@ -34,6 +45,7 @@ public class RW extends RWbasic {
         isWriting = true;
         int tmp = super.write();
         isWriting = false;
+        semaphore.release();
         notifyAll();
         return tmp;
     }

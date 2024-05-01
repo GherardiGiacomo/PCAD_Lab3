@@ -23,9 +23,9 @@ public class RWbasic {
     }
 
     public static class Reader implements Runnable {
-        private RW rw;
+        private RWext rw;
 
-        public Reader(RW rw2) {
+        public Reader(RWext rw2) {
             this.rw = rw2;
         }
 
@@ -35,9 +35,9 @@ public class RWbasic {
     }
 
     public static class Writer implements Runnable {
-        private RW rw;
+        private RWext rw;
 
-        public Writer(RW rw2) {
+        public Writer(RWext rw2) {
             this.rw = rw2;
         }
 
@@ -47,45 +47,36 @@ public class RWbasic {
         }
     }
 
-  public static void main(String[] args) {
-        RW rw = new RW();
-        int N_THREADS = 50;
+public static void main(String[] args) {
+    RWext rw = new RWext();
+    int N_THREADS = 50;
 
-        Thread[] Lettori = new Thread[N_THREADS];
-        Thread[] Scrittori = new Thread[N_THREADS];
+    Thread[] Lettori = new Thread[N_THREADS];
+    Thread[] Scrittori = new Thread[N_THREADS];
 
-        for (int i = 0; i < N_THREADS; i++) {
-            Scrittori[i] = new Thread(new Writer(rw), "Scrittore n°" + i);
-            Scrittori[i].start();
+    for (int i = 0; i < N_THREADS; i++) {
+        Scrittori[i] = new Thread(new Writer(rw), "Scrittore n°" + i);
+        Lettori[i] = new Thread(new Reader(rw) ,"Lettore n°"+ i);
 
-            try {
-                Thread.sleep((int) (Math.random() * 100));
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+        Scrittori[i].start();
+        Lettori[i].start();
+
+        try {
+            Thread.sleep((int) (Math.random() * 100));
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
-
-        for (int i = 0; i < N_THREADS; i++) {
-            try {
-                Scrittori[i].join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-
-        for (int i = 0; i < N_THREADS; i++) {
-            Lettori[i] = new Thread(new Reader(rw) ,"Lettore n°"+ i);
-            Lettori[i].start();
-        }
-
-        for (int i = 0; i < N_THREADS; i++) {
-            try {
-                Lettori[i].join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-
-        System.out.println("Il valore finale di data é: " + rw.read());
     }
-} 
+
+    for (int i = 0; i < N_THREADS; i++) {
+        try {
+            Scrittori[i].join();
+            Lettori[i].join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    System.out.println("Il valore finale di data é: " + rw.read());
+}
+}
