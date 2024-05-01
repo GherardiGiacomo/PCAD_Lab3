@@ -1,85 +1,91 @@
-class RWbasic {
-    private int data = 0;
+public class RWbasic {
+    private int data;
+
+    public RWbasic() {
+        this.data = 0;
+    }
 
     public int read() {
         return data;
     }
 
-    public void write() {
-        int tmp = data; // (a) Legge il valore di data
-        tmp++; // (b) Aumenta di 1 il valore
-        // Simula un ritardo durante la scrittura
+    public int write() {
+        int tmp = data;
+        tmp++;
         try {
-            Thread.sleep(100);
+            Thread.sleep((int) (Math.random() * 100));
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            Thread.currentThread().interrupt();
+            System.err.println("Interruzione del thread " + Thread.currentThread().getName());
         }
-        data = tmp; // (c) Assegna il nuovo valore a data
+        data = tmp;
+        return tmp;
     }
 
     public static class Reader implements Runnable {
         private RWbasic rw;
 
-        public Reader(RWbasic rw) {
-            this.rw = rw;
+        public Reader(RWbasic rw2) {
+            this.rw = rw2;
         }
 
-        @Override
         public void run() {
-            int value = rw.read();
-            System.out.println(Thread.currentThread().getName() + " - Valore letto: " + value);
+            this.rw.read();
         }
     }
 
     public static class Writer implements Runnable {
         private RWbasic rw;
 
-        public Writer(RWbasic rw) {
-            this.rw = rw;
+        public Writer(RWbasic rw2) {
+            this.rw = rw2;
         }
 
-        @Override
         public void run() {
-            rw.write();
-            System.out.println(Thread.currentThread().getName() + " - Scrittura completata");
+            int tmp = this.rw.write();
+            System.out.println(Thread.currentThread().getName() +" scrive. data ora vale: " + tmp);
         }
     }
 
-    public static void main(String[] args) {
+  public static void main(String[] args) {
         RWbasic rw = new RWbasic();
-        int numReaders = 50;
-        int numWriters = 50;
+        int N_THREADS = 50;
 
-        Thread[] readerThreads = new Thread[numReaders];
-        for (int i = 0; i < numReaders; i++) {
-            readerThreads[i] = new Thread(new Reader(rw), "Lettore-" + i);
-            readerThreads[i].start();
-        }
+        Thread[] Lettori = new Thread[N_THREADS];
+        Thread[] Scrittori = new Thread[N_THREADS];
 
-        Thread[] writerThreads = new Thread[numWriters];
-        for (int i = 0; i < numWriters; i++) {
-            writerThreads[i] = new Thread(new Writer(rw), "Scrittore-" + i);
-            writerThreads[i].start();
-        }
+        for (int i = 0; i < N_THREADS; i++) {
+            Scrittori[i] = new Thread(new Writer(rw), "Scrittore n°" + i);
+            Scrittori[i].start();
 
-        // Attende che tutti i thread del lettore finiscano
-        for (Thread readerThread : readerThreads) {
             try {
-                readerThread.join();
+                Thread.sleep((int) (Math.random() * 100));
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
 
-        // Attende che tutti i thread dello scrittore finiscano
-        for (Thread writerThread : writerThreads) {
+        for (int i = 0; i < N_THREADS; i++) {
             try {
-                writerThread.join();
+                Scrittori[i].join();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
 
-        System.out.println("Valore finale del data: " + rw.read());
+        for (int i = 0; i < N_THREADS; i++) {
+            Lettori[i] = new Thread(new Reader(rw) ,"Lettore n°"+ i);
+            Lettori[i].start();
+        }
+
+        for (int i = 0; i < N_THREADS; i++) {
+            try {
+                Lettori[i].join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        System.out.println("Il valore finale di data é: " + rw.read());
     }
-}
+} 
