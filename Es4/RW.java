@@ -1,5 +1,5 @@
 public class RW extends RWbasic {
-    private int count = 0;
+    private int readerCount = 0;
     private boolean isWriting = false;
 
     @Override
@@ -9,13 +9,13 @@ public class RW extends RWbasic {
                 wait();
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
-                System.err.println("Errore: Il thread " + Thread.currentThread().getName()+"è stato interrotto");
+                System.err.println("Interruzione del thread " + Thread.currentThread().getName());
             }
         }
-        count++;
+        readerCount++;
         int tmp = super.read();
-        count--;
-        if (count == 0) {
+        readerCount--;
+        if (readerCount == 0) {
             notifyAll();
         }
         return tmp;
@@ -23,12 +23,12 @@ public class RW extends RWbasic {
 
     @Override
     public synchronized int write() {
-        while (isWriting || count > 0) {
+        while (isWriting || readerCount > 0) {
             try {
                 wait();
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
-                System.err.println("Errore: Il thread " + Thread.currentThread().getName()+"è stato interrotto");
+                System.err.println("Interruzione del thread " + Thread.currentThread().getName());
             }
         }
         isWriting = true;
