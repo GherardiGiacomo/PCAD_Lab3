@@ -55,7 +55,7 @@ public class RWbasic {
         Thread[] Scrittori = new Thread[N_THREADS];
 
         for (int i = 0; i < N_THREADS; i++) {
-            Scrittori[i] = new Thread(new Writer(rw), "Scrittore n°" + i);
+            Scrittori[i] = new Thread(new Writer(rw), "Scrittore n" + i);
             Scrittori[i].start();
 
             try {
@@ -86,6 +86,6 @@ public class RWbasic {
             }
         }
 
-        System.out.println("Il valore finale di data é: " + rw.read());
+        System.out.println("Il valore finale di data: " + rw.read());
     }
 } 

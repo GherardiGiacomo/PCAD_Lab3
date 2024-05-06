@@ -9,7 +9,7 @@ public class RW extends RWbasic {
                 wait();
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
-                System.err.println("Errore: Il thread " + Thread.currentThread().getName()+"è stato interrotto");
+                System.err.println("Errore: Il thread " + Thread.currentThread().getName()+"e' stato interrotto");
             }
         }
         count++;
@@ -28,7 +28,7 @@ public class RW extends RWbasic {
                 wait();
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
-                System.err.println("Errore: Il thread " + Thread.currentThread().getName()+"è stato interrotto");
+                System.err.println("Errore: Il thread " + Thread.currentThread().getName()+"e' stato interrotto");
             }
         }
         isWriting = true;

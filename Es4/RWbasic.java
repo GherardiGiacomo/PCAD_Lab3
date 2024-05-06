@@ -55,8 +55,8 @@ public static void main(String[] args) {
     Thread[] Scrittori = new Thread[N_THREADS];
 
     for (int i = 0; i < N_THREADS; i++) {
-        Scrittori[i] = new Thread(new Writer(rw), "Scrittore n°" + i);
-        Lettori[i] = new Thread(new Reader(rw) ,"Lettore n°"+ i);
+        Scrittori[i] = new Thread(new Writer(rw), "Scrittore n" + i);
+        Lettori[i] = new Thread(new Reader(rw) ,"Lettore n"+ i);
 
         Scrittori[i].start();
         Lettori[i].start();
@@ -77,6 +77,6 @@ public static void main(String[] args) {
         }
     }
 
-    System.out.println("Il valore finale di data é: " + rw.read());
+    System.out.println("Il valore finale di data: " + rw.read());
 }
 } 
